@@ -42,6 +42,12 @@ class WhoisDomainExpirationCheck < Sensu::Plugin::Check::CLI
          required: true,
          description: 'Domain(s) to check. Separate by commas for 2+'
 
+  option :host,
+         short: '-s HOST',
+         long: '--host HOST',
+         default: nil,
+         description: 'Host to query if default is not working'
+
   option :warning,
          short: '-w DAYS',
          long: '--warn DAYS',
@@ -101,7 +107,7 @@ class WhoisDomainExpirationCheck < Sensu::Plugin::Check::CLI
       ok: {},
       unknown: {}
     }
-    whois = Whois::Client.new(timeout: config[:timeout])
+    whois = Whois::Client.new(timeout: config[:timeout], host: config[:host])
 
     domains.each do |domain|
       begin
